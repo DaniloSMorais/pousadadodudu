@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Pousada do Dudu",
-  description: "Recarregue suas energias",
+  description: "Tranquilidade e Conforto",
 };
 
 export default function RootLayout({
