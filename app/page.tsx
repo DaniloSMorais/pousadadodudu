@@ -2,19 +2,28 @@
 import { useState } from "react";
 
 export default function Home() {
+  // Tipagem do estado para evitar erros de compilação
   const [formData, setFormData] = useState({ 
     nome: "", 
-    quarto: "Standard",
+    cidade: "",
+    quarto: "Quarto de Casal",
     pessoas: "2 Pessoas",
     checkin: "",
     checkout: "" 
   });
 
+  // Correção TypeScript: Definindo o tipo da string de ID
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
   const zapUrl = "https://wa.me/5543998419973";
+
+  // SOLUÇÃO DO ERRO: Parâmetros agora possuem tipagem 'string'
+  const selecionarQuarto = (nomeQuarto: string, qtdPessoas: string) => {
+    setFormData({ ...formData, quarto: nomeQuarto, pessoas: qtdPessoas });
+    scrollToSection("contato");
+  };
 
   return (
     <div className="bg-[#0f172a] text-white font-sans selection:bg-orange-500/30 min-h-screen pb-20">
@@ -55,52 +64,56 @@ export default function Home() {
             </text>
           </svg>
           <p className="text-lg md:text-2xl text-slate-300 max-w-2xl mx-auto mt-6 mb-10 italic">
-            Conforto e tranquilidade em Ribeirão do Pinhal
+            Conforto e qualidade em Ribeirão do Pinhal
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <button onClick={() => scrollToSection("quartos")} className="bg-orange-600 hover:bg-orange-500 px-10 py-4 rounded-full font-bold shadow-lg transition-all transform hover:scale-105">Ver Quartos</button>
+            <button onClick={() => scrollToSection("quartos")} className="bg-orange-600 hover:bg-orange-500 px-10 py-4 rounded-full font-bold shadow-lg transition-all transform hover:scale-105">Ver Tarifário</button>
             <button onClick={() => scrollToSection("contato")} className="border border-slate-700 hover:bg-slate-800 px-10 py-4 rounded-full font-bold transition-all">Reservar Agora</button>
           </div>
         </div>
       </section>
 
-      {/* SEÇÃO DE QUARTOS */}
+      {/* SEÇÃO DE TARIFÁRIO */}
       <section id="quartos" className="py-24 px-6 bg-[#020617]">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-16 italic text-orange-400 tracking-wider uppercase">Nossas Acomodações</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-left">
-            
-            <div className="flex flex-col p-8 bg-slate-900/50 border border-slate-800 rounded-3xl transition-all duration-300 hover:scale-105 hover:border-orange-500/50 shadow-xl group">
-              <h3 className="text-2xl font-bold mb-4 text-white uppercase tracking-tight">Suíte Standard</h3>
-              <p className="text-slate-300 mb-6 text-sm leading-relaxed">Conforto essencial para quem busca descanso. Equipada com cama box casal, ar condicionado e Wi-Fi.</p>
-              <blockquote className="border-l-4 border-orange-500 pl-4 py-2 mb-8 italic text-slate-400 text-xs">
-                "Café da manhã completo incluso na diária e garagem privativa."
-              </blockquote>
-              <div className="mt-auto">
-                <button onClick={() => {setFormData({...formData, quarto: "Standard"}); scrollToSection("contato")}} className="inline-block w-full text-center bg-transparent border border-orange-600 text-orange-400 font-bold py-3 rounded-xl hover:bg-orange-600 hover:text-white transition-all uppercase text-xs">Selecionar</button>
-              </div>
-            </div>
-
-            <div className="flex flex-col p-8 bg-gradient-to-br from-[#1e1b4b] to-black border border-orange-500/30 rounded-3xl transition-all duration-300 hover:scale-105 shadow-2xl relative overflow-hidden group">
-              <h3 className="text-2xl font-bold mb-4 text-orange-400 uppercase tracking-tight italic">Luxo Family</h3>
-              <ul className="space-y-4 mb-8 text-sm text-slate-300 flex-grow">
-                <li className="flex items-start gap-2"><span className="text-orange-500 mt-1">✓</span> Amplo espaço para até 4 pessoas.</li>
-                <li className="flex items-start gap-2"><span className="text-orange-500 mt-1">✓</span> Varanda privativa com vista.</li>
-                <li className="flex items-start gap-2"><span className="text-orange-500 mt-1">✓</span> Frigobar e Smart TV 50".</li>
-              </ul>
-              <div className="mt-auto">
-                <button onClick={() => {setFormData({...formData, quarto: "Luxo Family"}); scrollToSection("contato")}} className="inline-block w-full text-center bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-500 transition-all uppercase text-sm shadow-lg shadow-orange-900/20">Escolher esta</button>
-              </div>
-            </div>
-
-            <div className="flex flex-col p-8 bg-slate-900/50 border border-slate-800 rounded-3xl transition-all duration-300 hover:scale-105 hover:border-amber-500/50 shadow-xl group">
-              <h3 className="text-2xl font-bold mb-4 text-amber-400 uppercase tracking-tight">Suíte Master</h3>
-              <p className="text-slate-300 mb-6 text-sm">A melhor experiência da pousada. Banheira de hidromassagem e enxoval premium.</p>
-              <div className="mt-auto">
-                <button onClick={() => {setFormData({...formData, quarto: "Master"}); scrollToSection("contato")}} className="inline-block w-full text-center bg-amber-600 text-white font-bold py-3 rounded-xl hover:bg-amber-500 transition-all text-sm uppercase">Selecionar VIP</button>
-              </div>
-            </div>
-
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 italic text-orange-400 tracking-wider uppercase">Tabela de Diárias</h2>
+          <p className="text-slate-400 mb-12 max-w-2xl mx-auto text-sm">Todas as nossas suítes possuem Café da Manhã e Wi-Fi inclusos.</p>
+          
+          <div className="overflow-x-auto rounded-3xl border border-slate-800 shadow-2xl">
+            <table className="w-full text-left border-collapse bg-slate-900/30">
+              <thead>
+                <tr className="bg-slate-800/80 text-orange-400 uppercase text-xs tracking-widest">
+                  <th className="p-6">Acomodação</th>
+                  <th className="p-6 text-center">Capacidade</th>
+                  <th className="p-6 text-center">Valor</th>
+                  <th className="p-6 text-right">Ação</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-300">
+                {[
+                  { nome: "Quarto Individual", cap: "1 Pessoa", preco: "130,00" },
+                  { nome: "Quarto de Casal", cap: "2 Pessoas", preco: "150,00" },
+                  { nome: "Quarto Duplo (2 Camas)", cap: "2 Pessoas", preco: "180,00" },
+                  { nome: "Quarto Triplo", cap: "3 Pessoas", preco: "220,00" },
+                  { nome: "Quarto Quádruplo", cap: "4 Pessoas", preco: "260,00" },
+                  { nome: "Quarto Quíntuplo (Família)", cap: "5 Pessoas", preco: "300,00" },
+                ].map((item, index) => (
+                  <tr key={index} className="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                    <td className="p-6 font-bold text-white">{item.nome}</td>
+                    <td className="p-6 text-center text-slate-400 text-sm">{item.cap}</td>
+                    <td className="p-6 text-center text-orange-400 font-bold">R$ {item.preco}</td>
+                    <td className="p-6 text-right">
+                      <button 
+                        onClick={() => selecionarQuarto(item.nome, item.cap)}
+                        className="bg-orange-600/10 hover:bg-orange-600 text-orange-500 hover:text-white border border-orange-600/50 px-4 py-2 rounded-lg text-xs font-bold transition-all uppercase"
+                      >
+                        Selecionar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -111,108 +124,148 @@ export default function Home() {
           
           <div className="space-y-8">
             <h3 className="text-3xl font-bold italic text-orange-400 uppercase tracking-tighter">Nossa Estrutura</h3>
-            <p className="text-slate-400 leading-relaxed">Localizada estrategicamente em Ribeirão do Pinhal, oferecemos:</p>
             
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-4 p-4 bg-slate-900/40 border border-slate-800 rounded-2xl group">
-                <div className="p-3 bg-orange-500/20 rounded-xl group-hover:scale-110 transition-transform">
-                  <span className="text-orange-500 text-xl font-bold">☕</span>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="flex items-center gap-4 p-4 bg-slate-900/40 border border-slate-800 rounded-2xl">
+                <div className="p-3 bg-orange-500/20 rounded-xl">
+                  <span className="text-orange-500 text-xl font-bold">🏠</span>
                 </div>
                 <div>
-                  <p className="text-xs uppercase font-black text-slate-500">Café da Manhã</p>
-                  <p className="font-bold text-slate-200">Incluso na diária</p>
+                  <p className="text-xs uppercase font-black text-slate-500">Acomodações</p>
+                  <p className="font-bold text-slate-200">Quartos Suítes com Banheiro Privado</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-slate-900/40 border border-slate-800 rounded-2xl group">
-                <div className="p-3 bg-orange-500/20 rounded-xl group-hover:scale-110 transition-transform">
-                  <span className="text-orange-500 text-xl font-bold">🚗</span>
+              <div className="flex items-center gap-4 p-4 bg-slate-900/40 border border-slate-800 rounded-2xl">
+                <div className="p-3 bg-orange-500/20 rounded-xl">
+                  <span className="text-orange-500 text-xl font-bold">❄️</span>
                 </div>
                 <div>
-                  <p className="text-xs uppercase font-black text-slate-500">Estacionamento</p>
-                  <p className="font-bold text-slate-200">Garagem segura e monitorada</p>
+                  <p className="text-xs uppercase font-black text-slate-500">Conforto Térmico</p>
+                  <p className="font-bold text-slate-200">Ar-Condicionado em todas as unidades</p>
                 </div>
+              </div>
+
+              <div className="flex items-center gap-4 p-4 bg-slate-900/40 border border-slate-800 rounded-2xl">
+                <div className="p-3 bg-orange-500/20 rounded-xl">
+                  <span className="text-orange-500 text-xl font-bold">📺</span>
+                </div>
+                <div>
+                  <p className="text-xs uppercase font-black text-slate-500">Tecnologia e Lazer</p>
+                  <p className="font-bold text-slate-200">Smart TV e Frigobar</p>
+                </div>
+              </div>
+
+              <div className="p-6 bg-slate-900/60 border border-orange-500/20 rounded-3xl mt-4 shadow-xl text-sm space-y-2 text-center md:text-left">
+                 <h4 className="text-orange-400 font-bold uppercase text-[10px] mb-2 tracking-widest">Garantia de Reserva (PIX)</h4>
+                 <p className="text-slate-300 font-mono">CNPJ: 44.085.251/0001-91</p>
+                 <p className="text-slate-500 text-[10px] uppercase">Laila Aparecida De Almeida</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-b from-slate-900 to-black p-8 md:p-10 rounded-[3rem] border border-slate-800 shadow-2xl">
-            <h3 className="text-2xl font-bold mb-8 text-center uppercase italic tracking-tighter">Fazer Pré-Reserva</h3>
+          <div className="bg-gradient-to-b from-slate-900 to-black p-8 md:p-10 rounded-[3rem] border border-slate-800 shadow-2xl relative">
+            <h3 className="text-2xl font-bold mb-8 text-center uppercase italic tracking-tighter">Solicitar Pré-Reserva</h3>
             <div className="space-y-4">
-              
-              <input 
-                type="text" 
-                placeholder="Seu Nome" 
-                className="w-full bg-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 border border-transparent text-white transition-all"
-                onChange={(e) => setFormData({...formData, nome: e.target.value})}
-              />
+              <input type="text" placeholder="Nome Completo" className="w-full bg-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 border border-transparent text-white transition-all" value={formData.nome} onChange={(e) => setFormData({...formData, nome: e.target.value})} />
+              <input type="text" placeholder="Sua Cidade" className="w-full bg-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 border border-transparent text-white transition-all" value={formData.cidade} onChange={(e) => setFormData({...formData, cidade: e.target.value})} />
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-[10px] uppercase font-bold text-slate-500 ml-2 mb-1 block">Check-in</label>
-                  <input 
-                    type="date" 
-                    className="w-full bg-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 border border-transparent text-white transition-all"
-                    onChange={(e) => setFormData({...formData, checkin: e.target.value})}
-                  />
+                  <input type="date" className="w-full bg-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 text-white transition-all text-xs" onChange={(e) => setFormData({...formData, checkin: e.target.value})} />
                 </div>
                 <div>
                   <label className="text-[10px] uppercase font-bold text-slate-500 ml-2 mb-1 block">Check-out</label>
-                  <input 
-                    type="date" 
-                    className="w-full bg-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 border border-transparent text-white transition-all"
-                    onChange={(e) => setFormData({...formData, checkout: e.target.value})}
-                  />
+                  <input type="date" className="w-full bg-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 text-white transition-all text-xs" onChange={(e) => setFormData({...formData, checkout: e.target.value})} />
                 </div>
               </div>
 
               <div>
-                <label className="text-[10px] uppercase font-bold text-slate-500 ml-2 mb-1 block">Quantidade de Pessoas</label>
-                <select 
-                  className="w-full bg-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 border border-transparent text-white transition-all appearance-none cursor-pointer"
-                  onChange={(e) => setFormData({...formData, pessoas: e.target.value})}
-                >
-                  <option value="1 Pessoa">1 Pessoa</option>
-                  <option value="2 Pessoas">2 Pessoas</option>
-                  <option value="3 Pessoas">3 Pessoas</option>
-                  <option value="4 Pessoas">4 Pessoas</option>
-                  <option value="5 Pessoas">5 Pessoas (Grupo)</option>
+                <label className="text-[10px] uppercase font-bold text-slate-500 ml-2 mb-1 block">Acomodação Selecionada</label>
+                <select value={formData.quarto} className="w-full bg-slate-800 p-4 rounded-2xl outline-none border border-orange-500/30 text-white font-bold" onChange={(e) => setFormData({...formData, quarto: e.target.value})}>
+                  <option value="Quarto Individual">Quarto Individual (1 Pessoa)</option>
+                  <option value="Quarto de Casal">Quarto de Casal (2 Pessoas)</option>
+                  <option value="Quarto Duplo (2 Camas)">Quarto Duplo (2 Camas)</option>
+                  <option value="Quarto Triplo">Quarto Triplo (3 Pessoas)</option>
+                  <option value="Quarto Quádruplo">Quarto Quádruplo (4 Pessoas)</option>
+                  <option value="Quarto Quíntuplo (Família)">Quarto Quíntuplo (5 Pessoas)</option>
                 </select>
               </div>
 
-              <div>
-                <label className="text-[10px] uppercase font-bold text-slate-500 ml-2 mb-1 block">Acomodação</label>
-                <select 
-                  value={formData.quarto}
-                  className="w-full bg-slate-800 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-orange-500 border border-transparent text-white transition-all appearance-none cursor-pointer"
-                  onChange={(e) => setFormData({...formData, quarto: e.target.value})}
-                >
-                  <option value="Standard">Suíte Standard</option>
-                  <option value="Luxo Family">Suíte Luxo Family</option>
-                  <option value="Master">Suíte Master</option>
-                </select>
-              </div>
-
-              <button 
-                onClick={() => {
-                  const inDate = formData.checkin ? formData.checkin.split('-').reverse().join('/') : "A definir";
-                  const outDate = formData.checkout ? formData.checkout.split('-').reverse().join('/') : "A definir";
-                  const msg = `Olá! Me chamo ${formData.nome}. Gostaria de solicitar uma reserva:\n\n🏨 *Quarto:* ${formData.quarto}\n👥 *Pessoas:* ${formData.pessoas}\n📅 *Check-in:* ${inDate}\n📅 *Check-out:* ${outDate}`;
-                  window.open(`${zapUrl}?text=${encodeURIComponent(msg)}`, "_blank");
-                }}
-                className="w-full bg-orange-600 hover:bg-orange-500 py-4 rounded-2xl font-black uppercase tracking-widest transition-all shadow-lg active:scale-95 mt-4"
-              >
-                Solicitar Reserva
+              <button onClick={() => {
+                const inDate = formData.checkin ? formData.checkin.split('-').reverse().join('/') : "A definir";
+                const outDate = formData.checkout ? formData.checkout.split('-').reverse().join('/') : "A definir";
+                const msg = `Olá! Gostaria de solicitar uma reserva:\n\n🏨 *Acomodação:* ${formData.quarto}\n👤 *Hóspede:* ${formData.nome}\n🏙️ *Cidade:* ${formData.cidade}\n📅 *Check-in:* ${inDate}\n📅 *Check-out:* ${outDate}`;
+                window.open(`${zapUrl}?text=${encodeURIComponent(msg)}`, "_blank");
+              }} className="w-full bg-orange-600 hover:bg-orange-500 py-4 rounded-2xl font-black uppercase tracking-widest transition-all shadow-lg active:scale-95 mt-4">
+                Solicitar Pré-Reserva
               </button>
             </div>
           </div>
+        </div>
+      </section>
 
+      {/* SEÇÃO DE INFORMAÇÕES ADICIONAIS E LOCALIZAÇÃO */}
+      <section className="py-24 px-6 bg-[#020617] border-t border-slate-900">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            
+            <div className="space-y-8">
+              <h3 className="text-2xl font-bold italic text-orange-400 uppercase tracking-tighter">Informações Importantes</h3>
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                   <div className="text-orange-500 font-bold">🕒</div>
+                   <div>
+                     <p className="text-sm font-bold text-white uppercase tracking-wider">Horários</p>
+                     <p className="text-slate-400 text-sm">Check-in: a partir das 13h00</p>
+                     <p className="text-slate-400 text-sm">Check-out: até às 12h00</p>
+                   </div>
+                </div>
+                <div className="flex gap-4">
+                   <div className="text-orange-500 font-bold">🍽️</div>
+                   <div>
+                     <p className="text-sm font-bold text-white uppercase tracking-wider">Alimentação</p>
+                     <p className="text-slate-400 text-sm italic">O Jantar é cobrado adicionalmente.</p>
+                   </div>
+                </div>
+                <div className="flex gap-4">
+                   <div className="text-orange-500 font-bold">📞</div>
+                   <div>
+                     <p className="text-sm font-bold text-white uppercase tracking-wider">Contatos para Reservas</p>
+                     <p className="text-slate-400 text-sm">(43) 98417-2179 | (43) 98859-6168</p>
+                     <p className="text-slate-400 text-sm">(43) 3551-1588</p>
+                   </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-8">
+              <h3 className="text-2xl font-bold italic text-orange-400 uppercase tracking-tighter">Localização</h3>
+              <div className="p-6 bg-slate-900/50 rounded-3xl border border-slate-800 space-y-4">
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  Rodovia Jamil Muchaili, PR 218, KM 47, Ribeirão do Pinhal/PR.
+                </p>
+                <p className="text-[10px] text-orange-500/80 italic uppercase font-bold">
+                  Saída para a cidade de Nova Fátima.
+                </p>
+                <a 
+                  href="https://www.google.com/maps/search/?api=1&query=Rodovia+Jamil+Muchaili+PR+218+KM+47+Ribeirao+do+Pinhal" 
+                  target="_blank"
+                  className="inline-flex items-center gap-2 bg-white text-black px-6 py-4 rounded-xl font-bold text-xs uppercase hover:bg-orange-500 hover:text-white transition-all w-full justify-center shadow-xl"
+                >
+                  Sincronizar no Maps
+                </a>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
       <footer className="py-12 text-center text-slate-700 border-t border-slate-900 bg-black">
-        <p className="font-bold tracking-[0.3em] text-slate-500 text-xs uppercase">Pousada do Dudu</p>
-        <p className="text-[10px] mt-2 opacity-30 uppercase tracking-[0.5em]">Ribeirão do Pinhal - PR</p>
+        <p className="font-bold tracking-[0.3em] text-slate-500 text-xs uppercase italic">Pousada do Dudu</p>
+        <p className="text-[10px] mt-2 opacity-30 uppercase tracking-[0.5em]">Ribeirão do Pinhal - PR | Deus Abençoe Grandemente</p>
       </footer>
     </div>
   );
